@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WattUseWhere - Find Singapore Climate Voucher Retailers</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <!-- Leaflet MarkerCluster CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Favicon (Optional but recommended for professional look) -->
+    <!-- <link rel="icon" type="image/png" href="favicon.png"> -->
+</head>
+<body>
+    <div class="page-wrapper"> <!-- Added wrapper for potential full-height layouts -->
+        <header class="site-header">
+            <div class="container header-container"> <!-- Use container for consistent width -->
+                 <div class="logo-title">
+                    <i class="bi bi-lightning-charge-fill header-icon"></i>
+                    <h1>WattUseWhere</h1>
+                 </div>
+                 <p class="tagline">Find retailers accepting SG Climate Vouchers</p>
+            </div>
+        </header>
+
+        <div class="container content-body"> <!-- Main content area container -->
+
+            <!-- Core Info Section (Structured with Cards) -->
+            <section class="info-grid">
+                <div class="info-card">
+                    <h2><i class="bi bi-cash-coin icon-left"></i>Voucher Details</h2>
+                    <ul class="detail-list">
+                        <li><strong>Now Available:</strong> $300 (HDB Households)</li>
+                        <li><strong>From 15 Apr 2025:</strong> +$100 top-up (Total $400). Eligibility expands to private residences (SG Citizens).</li>
+                        <li><strong>Expiry:</strong> <strong class="text-highlight expiry">31 Dec 2027</strong> (for all 2024/2025 vouchers)</li>
+                    </ul>
+                    <a href="https://www.climate-friendly-households.gov.sg/" target="_blank" rel="noopener noreferrer" class="official-link-button">
+                        <i class="bi bi-box-arrow-up-right"></i> Official CFHP Website
+                    </a>
+                </div>
+
+                <div class="info-card">
+                    <h2><i class="bi bi-person-check-fill icon-left"></i>How to Claim</h2>
+                    <ol class="claiming-steps">
+                         <li>Visit official RedeemSG page (link on CFHP site).</li>
+                         <li>Log in via Singpass.</li>
+                         <li>Digital voucher link sent via SMS.</li>
+                         <li>Show QR code at cashier.</li>
+                     </ol>
+                     <p class="note">This site helps find stores only, use official channels to claim.</p>
+                </div>
+
+                <div class="info-card large"> <!-- Span 2 columns -->
+                    <h2><i class="bi bi-basket2-fill icon-left"></i>Eligible Product Types (10)</h2>
+                    <ul class="eligible-items">
+                         <!-- Re-arranged slightly for better flow -->
+                        <li><span><i class="bi bi-snow2"></i> Refrigerator <small>(≥3 Ticks)</small></span></li>
+                        <li><span><i class="bi bi-thermometer-sun"></i> Air-conditioner <small>(5 Ticks)</small></span></li>
+                        <li><span><i class="bi bi-arrow-repeat"></i> Washing Machine <small>(≥4 Ticks)</small></span></li>
+                        <li><span><i class="bi bi-lightbulb"></i> LED Light <small>(≤13W)</small></span></li>
+                        <li><span><i class="bi bi-fan"></i> DC Fan <small>(≤35W)</small></span></li>
+                        <li><span><i class="bi bi-droplet-half"></i> Heat Pump Water Heater</span></li>
+                        <li><span><i class="bi bi-check-square"></i> Water Closet <small>(≥2 Ticks)</small></span></li>
+                        <li><span><i class="bi bi-wrench-adjustable-circle"></i> Basin Tap/Mixer <small>(≥2 Ticks)</small></span></li>
+                        <li><span><i class="bi bi-filter-square"></i> Sink/Bib Tap/Mixer <small>(≥2 Ticks)</small></span></li>
+                        <li><span><i class="bi bi-person-arms-up"></i> Shower Tap/Mixer <small>(≥2 Ticks)</small></span></li>
+                    </ul>
+                     <p class="note">Always check product model & tick rating suitability with retailer.</p>
+                </div>
+            </section> <!-- End Info Grid -->
+
+
+            <!-- Retailer Finder Controls -->
+            <section class="controls-section">
+                <p class="controls-intro">Use the tools below to find retailers near you or selling specific product types.</p>
+                <div class="search-filter-bar">
+                    <div class="search-input-group">
+                        <i class="bi bi-search"></i>
+                        <label for="search-input" class="visually-hidden">Search Retailers by Name or Address</label>
+                        <input type="text" id="search-input" placeholder="Search retailers..." aria-label="Search Retailers">
+                    </div>
+                    <button id="find-me-btn" title="Find retailers near me" aria-label="Find retailers near me">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>Near Me</span>
+                    </button>
+                </div>
+
+                <div class="filter-area">
+                    <span class="filter-label">Filter by category sold:</span>
+                    <div class="category-filters">
+                        <div><input type="checkbox" id="filter-major" value="sellsMajorAppliances"><label for="filter-major">Major Appliances</label></div>
+                        <div><input type="checkbox" id="filter-fans-lights" value="sellsFansLighting"><label for="filter-fans-lights">Fans/Lights</label></div>
+                        <div><input type="checkbox" id="filter-water" value="sellsWaterFittingsSanitary"><label for="filter-water">Water/Sanitary</label></div>
+                        <div><input type="checkbox" id="filter-hp-water-heater" value="sellsHpWaterHeater"><label for="filter-hp-water-heater">HP Heater</label></div>
+                    </div>
+                </div>
+                 <div class="results-summary">
+                    Showing <strong id="results-count">0</strong> retailers. <span id="location-status" class="status-info"></span>
+                </div>
+            </section> <!-- End Controls Section -->
+
+
+            <!-- Map & List Area -->
+            <main class="content-area">
+                <div id="map-container">
+                     <div id="map-loader" class="map-overlay is-loading"><span><i class="bi bi-arrow-clockwise spin"></i> Loading Map...</span></div>
+                     <div id="map"></div>
+                </div>
+                <div id="retailer-list-container">
+                    <h2>Retailer Results <small>(Verify In-Store)</small></h2>
+                    <div id="retailer-list">
+                        <p class="list-placeholder">Search or filter to see retailers here.</p>
+                    </div>
+                </div>
+            </main> <!-- End Content Area -->
+
+        </div> <!-- End Content Body Container -->
+
+        <footer class="site-footer"> <!-- Added class -->
+            <div class="container footer-content"> <!-- Container for footer content -->
+                <p class="data-source">
+                    Retailer info sourced from official <a href="https://www.climate-friendly-households.gov.sg/" target="_blank" rel="noopener noreferrer">CFHP website</a> (~Apr 2025 data). Subject to changes.
+                </p>
+                 <hr class="footer-divider">
+                <div class="disclaimer">
+                     <p><strong>Disclaimer:</strong> WattUseWhere is an independent helper tool, not official or affiliated with the government. Info provided "as is" without warranty. Accuracy is not guaranteed; retailer details & participation change. Official voucher T&Cs apply.</p>
+                     <p>Users **must always verify** info with retailers and the <a href="https://www.climate-friendly-households.gov.sg/" target="_blank" rel="noopener noreferrer">official CFHP website</a> before visiting/purchasing. Use at own risk; creator not liable for issues.</p>
+                     <p>Location feature uses browser services only with permission & isn't stored.</p>
+                </div>
+                 <p class="creator-note">App Concept by NY and CA</p>
+            </div>
+        </footer> <!-- End Site Footer -->
+
+    </div> <!-- End Page Wrapper -->
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
